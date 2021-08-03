@@ -1,9 +1,9 @@
-import UIKit
+import Foundation
 
 
 /// 초대장: 이벤트 당첨자에게 발송되는 초대장
 class Invitation {
-    private var when: Date?
+    private var when = Data()
 }
 
 /// 티켓: 공연을 관람하기 원하는 모든 사람들은 티켓을 소지해야함.
@@ -99,10 +99,10 @@ class TiketOffice {
 
 /// 판매원: 초대장을 티켓으로 교환해 주거나 테켓을 판매하는 역할.
 class TicketSeller {
-    private ticketOfficce: TiketOffice
+    private var ticketOfficce: TiketOffice
     
     init(ticketOfiice: TiketOffice) {
-        self.ticketOfficce = ticketOfficce
+        self.ticketOfficce = ticketOfiice
     }
     
     // MARK: TicketOffice에 접근하는 코드를 TicketSeller로 이동
