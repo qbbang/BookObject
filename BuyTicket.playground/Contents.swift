@@ -32,24 +32,34 @@ class Bag {
         self.amount = amount
     }
     
+    func hold(ticket: Ticket) -> Double {
+        if hasInvitation() {
+            setTicket(ticket: ticket)
+            return 0
+        } else {
+            setTicket(ticket: ticket)
+            minusAmount(amount: ticket.getFee())
+            return ticket.getFee()
+        }
+    }
     
-    func hasInvitation() -> Bool {
+    private func hasInvitation() -> Bool {
         return invitaion != nil
     }
     
-    func hasTicket() -> Bool {
+    private func hasTicket() -> Bool {
         return ticket != nil
     }
 
-    func setTicket(ticket: Ticket) {
+    private func setTicket(ticket: Ticket) {
         self.ticket = ticket
     }
     
-    func minusAmount(amount: Double) {
+    private func minusAmount(amount: Double) {
         self.amount -= amount
     }
     
-    func plusAmount(amount: Double) {
+    private func plusAmount(amount: Double) {
         self.amount += amount
     }
 }
@@ -63,14 +73,7 @@ class Audience {
     }
     
     func buy(ticket: Ticket) -> Double {
-        if bag.hasInvitation() {
-            bag.setTicket(ticket: ticket)
-            return 0
-        } else {
-            bag.setTicket(ticket: ticket)
-            bag.minusAmount(amount: ticket.getFee())
-            return ticket.getFee()
-        }
+        return bag.hold(ticket: ticket)
     }
 }
 
@@ -84,30 +87,34 @@ class TiketOffice {
         self.tickets.append(contentsOf: tickets)
     }
     
-    func getTicket() -> Ticket {
+    func sellTicketTo(audience: Audience) {
+        plusAmount(amount: audience.buy(ticket: getTicket()))
+    }
+    
+    private func getTicket() -> Ticket {
         return tickets.remove(at: 0)
     }
     
-    func minusAmount(amount: Double) {
+    private func minusAmount(amount: Double) {
         self.amount -= amount
     }
     
-    func plusAmount(amount: Double) {
+    private func plusAmount(amount: Double) {
         self.amount += amount
     }
 }
 
 /// 판매원: 초대장을 티켓으로 교환해 주거나 테켓을 판매하는 역할.
 class TicketSeller {
-    private var ticketOfficce: TiketOffice
+    private var tiketOffice: TiketOffice
     
     init(ticketOfiice: TiketOffice) {
-        self.ticketOfficce = ticketOfiice
+        self.tiketOffice = ticketOfiice
     }
     
     // MARK: TicketOffice에 접근하는 코드를 TicketSeller로 이동
     func sellTo(audience: Audience) {
-        ticketOfficce.plusAmount(amount: audience.buy(ticket: ticketOfficce.getTicket()))
+        tiketOffice.sellTicketTo(audience: audience)
     }
 }
 
@@ -120,7 +127,8 @@ class Theater {
     }
     
     func enter(audience: Audience) {
-        
+        ticketSeller.sellTo(audience: audience)
     }
 }
 
+print("---")
