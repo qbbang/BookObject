@@ -62,8 +62,15 @@ class Audience {
         self.bag = bag
     }
     
-    func getBag() -> Bag {
-        return bag
+    func buy(ticket: Ticket) -> Double {
+        if bag.hasInvitation() {
+            bag.setTicket(ticket: ticket)
+            return 0
+        } else {
+            bag.setTicket(ticket: ticket)
+            bag.minusAmount(amount: ticket.getFee())
+            return ticket.getFee()
+        }
     }
 }
 
@@ -100,15 +107,7 @@ class TicketSeller {
     
     // MARK: TicketOffice에 접근하는 코드를 TicketSeller로 이동
     func sellTo(audience: Audience) {
-        if audience.getBag().hasInvitation() {
-            let ticket = ticketSeller.getTicketOffice().getTicket()
-            audience.getBag().setTicket(ticket: ticket)
-        } eles {
-            let ticket = ticketSeller.getTicketOffice().getTicket()
-            audience.getBag().minusAmount(amount: ticket.getFee())
-            ticketSeller.getTicketOffice().plusAmount(amount: ticket.getFee())
-            audience.getBag().setTicket(ticket: ticket)
-        }
+        ticketOfficce.plusAmount(amount: audience.buy(ticket: ticketOfficce.getTicket()))
     }
 }
 
