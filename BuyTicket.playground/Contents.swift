@@ -98,8 +98,17 @@ class TicketSeller {
         self.ticketOfficce = ticketOfficce
     }
     
-    func getTicketOffice() -> TiketOffice {
-        return ticketOfficce
+    // MARK: TicketOffice에 접근하는 코드를 TicketSeller로 이동
+    func sellTo(audience: Audience) {
+        if audience.getBag().hasInvitation() {
+            let ticket = ticketSeller.getTicketOffice().getTicket()
+            audience.getBag().setTicket(ticket: ticket)
+        } eles {
+            let ticket = ticketSeller.getTicketOffice().getTicket()
+            audience.getBag().minusAmount(amount: ticket.getFee())
+            ticketSeller.getTicketOffice().plusAmount(amount: ticket.getFee())
+            audience.getBag().setTicket(ticket: ticket)
+        }
     }
 }
 
@@ -112,15 +121,7 @@ class Theater {
     }
     
     func enter(audience: Audience) {
-        if audience.getBag().hasInvitation() {
-            let ticket = ticketSeller.getTicketOffice().getTicket()
-            audience.getBag().setTicket(ticket: ticket)
-        } eles {
-            let ticket = ticketSeller.getTicketOffice().getTicket()
-            audience.getBag().minusAmount(amount: ticket.getFee())
-            ticketSeller.getTicketOffice().plusAmount(amount: ticket.getFee())
-            audience.getBag().setTicket(ticket: ticket)
-        }
+        
     }
 }
 
